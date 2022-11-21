@@ -1,0 +1,148 @@
+.dashboard, .dashboard :global(.ant-tabs) { font-size: 1.6rem; }
+.p { line-height: 2.4rem; margin-bottom: 1rem }
+.dashboard:global(.container) { background: transparent }
+.block { padding: 2rem; margin: 2rem 0; border-radius: .8rem; background: #fff }
+.block.highlighted { background: #ffcc67; color: #000 }
+.block.highlighted p, .block.highlighted_with_shadow p { color: #000 }
+.block.highlighted_with_shadow { background: rgba(255, 204, 103, 0.6); color: #000; box-shadow: 0 0 10px 0 #ccc; }
+.block p:last-child, .block .p:last-child { margin: 0; }
+.info_block, .attention_block {
+    background: #fafafa;
+    padding: 1rem;
+    overflow-wrap: break-word;
+    border-radius: .8rem;
+}
+.attention_block {
+    background: #ffe8e8;
+}
+
+.error_text {
+    color: #f00;
+}
+.success_text {
+    color: #52c41a;
+    display: inline-flex;
+    margin-left: 5px;
+    align-items: center;
+}
+.success_text > :global(.anticon) {
+    margin-right: 5px;
+}
+.indicator {
+    background: #0a0528;
+    color: #fff;
+    padding: 1px 5px;
+    font-size: 11px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+.overview__text {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-auto-rows: min-content;
+    grid-gap: 0.5em;
+}
+.overview__text p { margin-bottom: 0; }
+.dashboard .overview__text_label {
+    grid-column: 1;
+    text-align: right;
+    font-weight: bold;
+}
+.dashboard .overview__text_text {
+    grid-column: 2;
+    text-align: left;
+}
+
+.tr_wrap {
+    border-bottom: 1px solid #ccc;
+}
+.tr_wrap > .tr { border-bottom:  0 none }
+.tr {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.4rem;
+}
+.tr > div:first-child {
+    padding-left: 0;
+}
+.tr > div:last-child {
+    padding-right: 0;
+}
+.tr:last-child {
+    border-bottom: none;
+}
+.tr > div {
+    flex: 1;
+    padding: 0.65rem;
+    word-break: break-all;
+}
+.tr > div.name {
+    flex: 2;
+}
+.th {
+    font-weight: 700;
+}
+
+.users__action { min-width: 70px; width: 70px; flex: 0 !important }
+.users__expand { min-width: 50px; width: 50px; flex: 0 !important }
+.users__expand_button { border: 1px solid #d9d9d9; background: #fff }
+.users__expand_button :global(.anticon) { vertical-align: 0 }
+.users__additional, .users__expand_button :global(.users-expand-minus),
+.expanded :global(.users-expand-plus) { display: none }
+.expanded :global(.users-expand-minus) { display: inline-block }
+
+.is-loading { position: relative; }
+.is-loading:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 5;
+}
+.is-loading:after {
+    content: '';
+    position: fixed;
+    width: 78px;
+    height: 78px;
+    left: calc(50% - 39px);
+    top: calc(50% - 39px);
+    background: url('/img/svg/loader.svg') no-repeat;
+    z-index: 6;
+}
+
+.home_buttons { display: flex; gap: 1rem; align-items: center; justify-content: center; }
+.home_buttons :global(.button) { padding: 1.6rem 3.2rem; font-size: 2.4rem; gap: 1rem; line-height: 1 }
+
+.mint_block { margin: 2rem 0; text-align: center; }
+.mint_block p { text-align: center; }
+.mint_block_quantity {
+    border: 2px solid #ccc; padding: 0.7rem 1.6rem; line-height: 1.9rem; border-top-left-radius: 0.8rem; border-bottom-left-radius: 0.8rem;
+    border-right: none;
+}
+
+.nft_collection { display: flex; gap: 1rem; flex-flow: row wrap; justify-content: center  }
+.nft_collection_item {
+    display: flex; flex-direction: column; gap: 0.5rem; width: 200px; border-top-right-radius: 0.8rem; border-top-left-radius: 0.8rem;
+    text-align: center; overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .home_buttons { flex-direction: column }
+}
+
+@media (max-width: 575px) {
+    .users__additional { flex-direction: column; }
+    .users__additional.tr > div { width: 100%; text-align: left; position: relative; padding: 0.65rem 0; }
+    .users__additional.tr > div:before { content: '•'; margin-right: .5rem; }
+    .overview__text { grid-template-columns: 1fr; }
+    .overview__text p { text-align: left }
+    .dashboard .overview__text_text, .dashboard .overview__text_label { grid-column: auto; text-align: left; }
+    .overview__text_label { position: relative; }
+    .overview__text_label:before { content: '•'; margin-right: .5rem; }
+    .home_buttons :global(.button) { font-size: 2rem; }
+}
