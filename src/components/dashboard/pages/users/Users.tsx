@@ -17,7 +17,7 @@ import { doRequest } from '@/api/Api'
 import { getUsers, useUsers } from '@/api/userApi'
 import styles from '@/dashboard/css/dashboard.module.css'
 import { Loader } from '@/lib/svg'
-import { checkAccess, truncateWalletAddress } from '@/lib/utils'
+import { checkAccess, truncateWalletAddress, VALID_WALLETS } from '@/lib/utils'
 import { FC } from '@/model/commonModel'
 import { User } from '@/model/usersModel'
 
@@ -31,8 +31,9 @@ type FilterValues = {
 type Props = {
   admin: User
   hasPending: boolean
+  allUsersTotal: number
 }
-const Users: FC<Props> = ({ admin, hasPending }) => {
+const Users: FC<Props> = ({ admin, hasPending, allUsersTotal }) => {
   const limit = 200
   const initialFilter: Partial<FilterValues> = useMemo(
     () =>
@@ -134,7 +135,8 @@ const Users: FC<Props> = ({ admin, hasPending }) => {
     return (
       <div className={styles.users__action}>
         {(!checkAccess(user.scope, 'admin') || checkAccess(admin.scope, 'superadmin')) &&
-        admin.id_str !== user._id.toString() ? (
+        admin.id_str !== user._id.toString() &&
+        VALID_WALLETS.includes(user.wallet) ? (
           user.status !== 'not_registered' ? (
             <Dropdown
               menu={{
@@ -225,7 +227,9 @@ const Users: FC<Props> = ({ admin, hasPending }) => {
             {users.length ? (
               <div className={styles.users}>
                 <div className={clsx('d-flex justify-content-between mb-1', styles.p)}>
-                  <div>Total: {total}</div>
+                  <div>
+                    Total: {total} of {allUsersTotal}
+                  </div>
                   <div>
                     <em>Found: {users.length}</em>
                   </div>

@@ -5,7 +5,7 @@ import { withPatchApi } from '@/api/withPatchApi'
 import { mongoClient } from '@/dao/mongoClient'
 import { User } from '@/model/usersModel'
 
-type RequestParams = Partial<User>
+type RequestParams = Partial<User> & { is_admin?: boolean }
 
 export default withPatchApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const params = parseRequest<RequestParams>(req)
@@ -29,7 +29,10 @@ export default withPatchApi(async (req: NextApiRequest, res: NextApiResponse) =>
       if (user && user.status !== 'verified' && user.status !== 'blocked') {
         const userStatus = mongoClient.isUserHasRequiredFields(user) ? 'verified' : 'not_registered'
 
-        await mongoClient.updateUser({ wallet: user.wallet }, { status: userStatus })
+        await mongoClient.updateUser(
+          { wallet: user.wallet },
+          { status: userStatus, scope: params.is_admin ? 'admin' : '' },
+        )
         user.status = userStatus
       }
     }

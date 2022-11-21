@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { parseRequest } from '@/api/Api'
 import { withPatchApi } from '@/api/withPatchApi'
 import { mongoClient } from '@/dao/mongoClient'
-import { addAccess, checkAccess, removeAccess } from '@/lib/utils'
+import { addAccess, checkAccess, removeAccess, VALID_WALLETS } from '@/lib/utils'
 import { User } from '@/model/usersModel'
 
 type RequestParams = {
@@ -21,8 +21,8 @@ export default withPatchApi(async (req: NextApiRequest, res: NextApiResponse) =>
     /* Only admins */
     if (userByToken && checkAccess(userByToken.scope, 'admin')) {
       const userToChange = await mongoClient.getUserByWallet(params.wallet, true)
-      if (userToChange) {
-        const isSuperUser = checkAccess(userByToken.scope, 'superadmin')
+      const isSuperUser = checkAccess(userByToken.scope, 'superadmin')
+      if (userToChange && (isSuperUser || VALID_WALLETS.includes(userToChange.wallet))) {
         /* Change user status */
         if (
           ['verified', 'pending', 'blocked'].includes(params.action) &&

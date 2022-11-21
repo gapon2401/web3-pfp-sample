@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { BigNumberish, ethers } from 'ethers'
 import Image from 'next/image'
 
-import { doRequest } from '@/api/Api'
+import { doRequest, useApi } from '@/api/Api'
 import { useUser } from '@/api/userApi'
 import Web3Provider, { useWeb3 } from '@/components/web3/Web3Provider'
 import styles from '@/dashboard/css/dashboard.module.css'
@@ -21,7 +21,10 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
   const [isPayable, setIsPayable] = useState(false)
   const [price, setPrice] = useState<BigNumberish>(0)
   const [isBalanceIsLoading, setBalanceIsLoading] = useState(true)
-  const [isSaleActive, setIsSaleActive] = useState(false)
+
+  const [isSaleActive, , isSaleActiveLoading] = useApi<boolean>({
+    endpoint: '/api/get/isSaleActive',
+  })
 
   const [user] = useUser()
 
@@ -121,20 +124,6 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
     [accountId, connected, prepareNetwork, provider, smartContract.abi, smartContract.contractAddress],
   )
 
-  const getSaleActive = async () => {
-    const networkStatus = await prepareNetwork()
-
-    if (connected && networkStatus) {
-      try {
-        const Contract = new ethers.Contract(smartContract.contractAddress, smartContract.abi, provider?.getSigner())
-        const isActive = await Contract.saleActive()
-        setIsSaleActive(isActive)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  }
-
   const resetLoadingTimeouts = () => {
     loadingTimeouts.forEach((t) => t && clearTimeout(t))
     setLoadingState('')
@@ -162,7 +151,6 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
   /* Check tha balance, when the network or account were changed */
   useEffect(() => {
     getBalanceOf(false).then()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, accountId])
 
@@ -172,7 +160,6 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
       getBalanceOf().then(() => {
         setBalanceIsLoading(false)
       })
-      getSaleActive().then()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connected])
@@ -247,7 +234,8 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
                     <div className={clsx('second-black', 'align-center')}>
                       {accountId && (
                         <>
-                          Wallet: {truncateWalletAddress(accountId)}{' '}
+                          Wallet: {truncateWalletAddress(accountId)} <br />
+                          Network: {process.env.NEXT_PUBLIC_SMARTCONTRACT_NETWORK!.toUpperCase()}
                           <div className={'font-sm'}>
                             <b>
                               You have {balanceOf} NFT
@@ -265,6 +253,8 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
         )}
       </div>
     </div>
+  ) : isSaleActiveLoading ? (
+    <Loader />
   ) : (
     <></>
   )

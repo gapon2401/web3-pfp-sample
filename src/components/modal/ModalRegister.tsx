@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Modal } from 'antd'
+import { Checkbox, Form, Input, Modal } from 'antd'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
@@ -47,6 +47,7 @@ const ModalRegister: FC<Props> = ({ show = false, children, setUser }) => {
     about: string
     about_profit: string
     about_grow: string
+    is_admin: boolean
   }) => {
     if (isLoading) {
       return
@@ -106,6 +107,15 @@ const ModalRegister: FC<Props> = ({ show = false, children, setUser }) => {
           Fill in the form to get access to your dashboard. It&apos;s important for us who will become a Sample holder
         </p>
         <Form name='user_reg' labelAlign='left' onFinish={handleOnOk} form={form} layout='vertical'>
+          <Form.Item
+            style={{ background: '#ffe8ba', padding: '5px' }}
+            label='Register as admin'
+            name='is_admin'
+            valuePropName='checked'
+            extra={`This field is only for demo purpose. Try dashboard as admin or as a regular user. Use different wallets for different accounts`}
+          >
+            <Checkbox />
+          </Form.Item>
           <Form.Item
             name='email'
             label={'Your email'}

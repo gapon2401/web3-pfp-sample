@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Tabs } from 'antd'
+import clsx from 'clsx'
 
 import { doRequest } from '@/api/Api'
 import { useApi } from '@/api/Api'
@@ -26,6 +27,7 @@ const DashboardHome: FC<Props> = ({ user }) => {
   const AdminTabs = () => {
     const [, isTotalLoading, , total] = useUsers(1)
     const [, isPendingTotalLoading, , pendingTotal] = useUsers(1, { status: 'pending' })
+    const isSuperAdmin = checkAccess(user.scope, 'superadmin')
     const items = [
       {
         label: (
@@ -39,7 +41,7 @@ const DashboardHome: FC<Props> = ({ user }) => {
           </>
         ),
         key: '1',
-        children: <Users admin={user} hasPending={pendingTotal > 0} />,
+        children: <Users admin={user} hasPending={pendingTotal > 0} allUsersTotal={total} />,
       },
       {
         label: 'Home',
@@ -48,9 +50,10 @@ const DashboardHome: FC<Props> = ({ user }) => {
       },
 
       {
-        label: 'Settings',
+        label: `Settings${!isSuperAdmin ? ` (only for superadmin from .env)` : ``}`,
         key: '3',
-        children: <Settings />,
+        disabled: !isSuperAdmin,
+        children: isSuperAdmin ? <Settings /> : <></>,
       },
     ]
 
@@ -70,17 +73,24 @@ const DashboardHome: FC<Props> = ({ user }) => {
     }
 
     return !isTotalLoading && !isPendingTotalLoading && !isTokensLoading ? (
-      <Tabs
-        defaultActiveKey={'1'}
-        items={items}
-        tabBarExtraContent={
-          checkAccess(user.scope, 'superadmin')
-            ? {
-                right: <Button onClick={onSetupIndexes}>Setup indexes</Button>,
-              }
-            : null
-        }
-      />
+      <>
+        <div className={clsx(styles.attention_block, 'mt-1')}>
+          This is demo of admin page. You can change only 5 users. <br />
+          All admins by default go to &quot;Users&quot; page with prefiltered value of &quot;Waiting&quot; state. <br />
+          In this demo all registered users become verified.
+        </div>
+        <Tabs
+          defaultActiveKey={'1'}
+          items={items}
+          tabBarExtraContent={
+            isSuperAdmin
+              ? {
+                  right: <Button onClick={onSetupIndexes}>Setup indexes</Button>,
+                }
+              : null
+          }
+        />
+      </>
     ) : (
       <Loader />
     )
@@ -101,7 +111,17 @@ const DashboardHome: FC<Props> = ({ user }) => {
         children: <Private />,
       })
     }
-    return !isTokensLoading ? <Tabs defaultActiveKey={'1'} items={items} /> : <Loader />
+    return !isTokensLoading ? (
+      <>
+        <div className={clsx(styles.attention_block, 'mt-1')}>
+          This is a demo of user&apos;s dashboard. <br />
+          Mint token and you will open private page, available only for NFT holders
+        </div>
+        <Tabs defaultActiveKey={'1'} items={items} />
+      </>
+    ) : (
+      <Loader />
+    )
   }
 
   return isAdmin ? <AdminTabs /> : <UserTabs />
