@@ -31,8 +31,9 @@ type FilterValues = {
 type Props = {
   admin: User
   hasPending: boolean
+  allUsersTotal: number
 }
-const Users: FC<Props> = ({ admin, hasPending }) => {
+const Users: FC<Props> = ({ admin, hasPending, allUsersTotal }) => {
   const limit = 200
   const initialFilter: Partial<FilterValues> = useMemo(
     () =>
@@ -225,7 +226,9 @@ const Users: FC<Props> = ({ admin, hasPending }) => {
             {users.length ? (
               <div className={styles.users}>
                 <div className={clsx('d-flex justify-content-between mb-1', styles.p)}>
-                  <div>Total: {total}</div>
+                  <div>
+                    Total: {total} of {allUsersTotal}
+                  </div>
                   <div>
                     <em>Found: {users.length}</em>
                   </div>

@@ -39,6 +39,7 @@
     align-items: center;
     gap: 1rem;
 }
+.promo__title span { max-width: 400px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 .promo__title a { color: #fff }
 .promo__button {
     font-size: 1.5rem !important;
@@ -365,6 +366,8 @@
         padding: 0 2rem;
     }
 
+    .promo__title span { max-width: 250px; }
+
     .cols__pfp { gap: 1rem; }
 
     .cols :global(img) {
@@ -436,6 +439,7 @@
 
 @media (max-width: 600px) {
     .team__member, .team__name { font-size: 1.6rem }
+    .promo__title span { max-width: 200px; }
 }
 
 @media (max-width: 500px) {
@@ -464,6 +468,7 @@
         margin-top: 10px;
     }
     .header_logo span { display: none; }
+    .promo__title { width: 30px; height: 30px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50' width='30px' height='30px' fill='%23ffffff' %3E%3Cpath d='M 25 1.0507812 C 24.7825 1.0507812 24.565859 1.1197656 24.380859 1.2597656 L 1.3808594 19.210938 C 0.95085938 19.550938 0.8709375 20.179141 1.2109375 20.619141 C 1.5509375 21.049141 2.1791406 21.129062 2.6191406 20.789062 L 4 19.710938 L 4 46 C 4 46.55 4.45 47 5 47 L 19 47 L 19 29 L 31 29 L 31 47 L 45 47 C 45.55 47 46 46.55 46 46 L 46 19.710938 L 47.380859 20.789062 C 47.570859 20.929063 47.78 21 48 21 C 48.3 21 48.589063 20.869141 48.789062 20.619141 C 49.129063 20.179141 49.049141 19.550938 48.619141 19.210938 L 25.619141 1.2597656 C 25.434141 1.1197656 25.2175 1.0507812 25 1.0507812 z M 35 5 L 35 6.0507812 L 41 10.730469 L 41 5 L 35 5 z' /%3E%3C/svg%3E"); }
 }
 @media (max-width: 375px) {
     .promo__bg {

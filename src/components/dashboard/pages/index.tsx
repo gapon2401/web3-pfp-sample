@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Tabs } from 'antd'
+import clsx from 'clsx'
 
 import { doRequest } from '@/api/Api'
 import { useApi } from '@/api/Api'
@@ -39,7 +40,7 @@ const DashboardHome: FC<Props> = ({ user }) => {
           </>
         ),
         key: '1',
-        children: <Users admin={user} hasPending={pendingTotal > 0} />,
+        children: <Users admin={user} hasPending={pendingTotal > 0} allUsersTotal={total} />,
       },
       {
         label: 'Home',
@@ -104,7 +105,18 @@ const DashboardHome: FC<Props> = ({ user }) => {
     return !isTokensLoading ? <Tabs defaultActiveKey={'1'} items={items} /> : <Loader />
   }
 
-  return isAdmin ? <AdminTabs /> : <UserTabs />
+  return (
+    <>
+      {user.status === 'pending' && !isAdmin && (
+        <div className={clsx(styles.attention_block, 'mt-1')}>
+          You have been registered to sale list. When your data will be processed, you will get a message on your email:{' '}
+          {user.email}. <br />
+          Only verified accounts can participate in the sale
+        </div>
+      )}
+      {isAdmin ? <AdminTabs /> : <UserTabs />}
+    </>
+  )
 }
 
 export default DashboardHome

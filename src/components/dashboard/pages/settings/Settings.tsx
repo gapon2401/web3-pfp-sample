@@ -4,7 +4,7 @@ import { Button, Checkbox, Form, Row } from 'antd'
 import clsx from 'clsx'
 import { ethers } from 'ethers'
 
-import { doRequest } from '@/api/Api'
+import { doRequest, useApi } from '@/api/Api'
 import { useUser } from '@/api/userApi'
 import Web3Provider, { useWeb3 } from '@/components/web3/Web3Provider'
 import styles from '@/dashboard/css/dashboard.module.css'
@@ -53,7 +53,9 @@ const Settings: FC<Props> = () => {
 const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
   const { connect, reconnect, connected, provider, accountId, isConnecting } = useWeb3()
   const [isLoading, setIsLoading] = useState(false)
-  const [isSaleActive, setIsSaleActive] = useState<boolean | null>(null)
+  const [isSaleActive, , , setIsSaleActive] = useApi<boolean>({
+    endpoint: '/api/get/isSaleActive',
+  })
 
   const [user] = useUser()
 
