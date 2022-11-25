@@ -61,7 +61,7 @@ Use link to unsubscribe: %unsubscribe_url%
               html: `
 <p>Hi, ${userToChange.name}!</p>
 <p>Your account is <b>verified</b> and from now you will be able to take part in the sale of TheSample.</p>
-<p>We will inform you, when the presale will start.</p>
+<p>We will inform you, when the sale will start.</p>
 <p>Your dashboard address is: 
   <a href='${process.env.NEXT_PUBLIC_API_PATH}/dashboard'>
       ${process.env.NEXT_PUBLIC_API_PATH}/dashboard

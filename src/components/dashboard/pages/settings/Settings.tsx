@@ -165,6 +165,46 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
     }
   }
 
+  const MailingButton = () => {
+    const [isMailing, setIsMailing] = useState<boolean>(false)
+    const [mailingSuccessText, setMailingStatusText] = useState<string>('')
+    const [mailingErrorText, setMailingErrorText] = useState<string>('')
+    const onMailingHandle = async () => {
+      if (!isMailing) {
+        if (confirm('Are you sure to start mail sending?')) {
+          setMailingStatusText('')
+          setIsMailing(true)
+          await doRequest({
+            method: 'POST',
+            endpoint: '/api/post/sale-mail-sending',
+          })
+            .then(() => {
+              setMailingStatusText('Success!')
+            })
+            .catch((e) => {
+              console.log(e)
+              setMailingErrorText('Error. Check console')
+            })
+        }
+      }
+      setIsMailing(false)
+    }
+
+    return (
+      <div className={styles.block}>
+        <Button type='primary' htmlType='submit' onClick={onMailingHandle} loading={isMailing}>
+          Start mailing that the sale is opened
+        </Button>
+        {mailingSuccessText.length > 0 && (
+          <span className={styles.success_text}>
+            <CheckCircleTwoTone twoToneColor='#52c41a' /> {mailingSuccessText}
+          </span>
+        )}
+        {mailingErrorText.length > 0 && <span className={styles.error_text}>{mailingErrorText}</span>}
+      </div>
+    )
+  }
+
   /* Reconnect to the wallet */
   useEffect(() => {
     ;(async () => {
@@ -234,6 +274,7 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
           )}
         </>
       )}
+      <MailingButton />
     </div>
   )
 }

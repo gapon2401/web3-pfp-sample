@@ -110,7 +110,7 @@ const ModalRegister: FC<Props> = ({ show = false, children, setUser }) => {
             name='email'
             label={'Your email'}
             rules={[requiredField]}
-            extra={'We will use it to notify you, when the presale starts'}
+            extra={'We will use it to notify you, when the sale starts'}
           >
             <Input type={'email'} />
           </Form.Item>
