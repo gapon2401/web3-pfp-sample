@@ -115,7 +115,7 @@ class MongoClient {
         delete user.token_expired
       }
 
-      if (user.wallet === (process.env.ADMIN || '0x0').toLowerCase()) {
+      if (process.env.ADMIN && user.wallet === process.env.ADMIN.toLowerCase()) {
         user.scope = addAccess(user.scope, 'superadmin')
         user.scope = addAccess(user.scope, 'admin')
       }
@@ -164,7 +164,7 @@ class MongoClient {
         delete user.token_expired
       }
 
-      if (user.wallet === (process.env.ADMIN || '0x0').toLowerCase()) {
+      if (process.env.ADMIN && user.wallet === process.env.ADMIN.toLowerCase()) {
         user.scope = addAccess(user.scope, 'superadmin')
       }
 

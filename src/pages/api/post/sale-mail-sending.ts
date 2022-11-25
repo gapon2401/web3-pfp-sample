@@ -7,7 +7,7 @@ import { checkAccess } from '@/lib/utils'
 
 export default withPostApi(async (req: NextApiRequest, res: NextApiResponse) => {
   const token = req.session.token
-  if (token) {
+  if (token && process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
     const user = await mongoClient.getUserByToken(token, true)
     if (user && checkAccess(user.scope, 'superadmin')) {
       const [users] = await mongoClient.getUsers({
@@ -54,6 +54,9 @@ Use link to unsubscribe: %unsubscribe_url%
   }
 
   res.status(200).json({
-    data: true,
+    data:
+      process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN
+        ? true
+        : { error: 'Specify environment variables for mailer' },
   })
 })
