@@ -114,6 +114,7 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
           }
         } catch (e) {
           console.log(e)
+          setIsLoading(false)
           return false
         }
       }
@@ -174,17 +175,15 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
         if (confirm('Are you sure to start mail sending?')) {
           setMailingStatusText('')
           setIsMailing(true)
-          await doRequest({
+          const response = await doRequest({
             method: 'POST',
             endpoint: '/api/post/sale-mail-sending',
           })
-            .then(() => {
-              setMailingStatusText('Success!')
-            })
-            .catch((e) => {
-              console.log(e)
-              setMailingErrorText('Error. Check console')
-            })
+          if (response.error) {
+            setMailingErrorText(response.error)
+          } else {
+            setMailingStatusText('Success!')
+          }
         }
       }
       setIsMailing(false)
@@ -200,7 +199,7 @@ const Content: FC<{ smartContract: Smartcontract }> = ({ smartContract }) => {
             <CheckCircleTwoTone twoToneColor='#52c41a' /> {mailingSuccessText}
           </span>
         )}
-        {mailingErrorText.length > 0 && <span className={styles.error_text}>{mailingErrorText}</span>}
+        {mailingErrorText.length > 0 && <div className={styles.error_text}>{mailingErrorText}</div>}
       </div>
     )
   }

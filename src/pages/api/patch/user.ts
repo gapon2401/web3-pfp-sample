@@ -27,7 +27,12 @@ export default withPatchApi(async (req: NextApiRequest, res: NextApiResponse) =>
 
       /* Change user status */
       if (user && user.status !== 'verified' && user.status !== 'blocked') {
-        const userStatus = mongoClient.isUserHasRequiredFields(user) ? 'pending' : 'not_registered'
+        let userStatus: User['status'] = mongoClient.isUserHasRequiredFields(user) ? 'pending' : 'not_registered'
+
+        /* Make superadmin verified by default */
+        if (process.env.ADMIN && user.wallet === process.env.ADMIN.toLowerCase() && userStatus === 'pending') {
+          userStatus = 'verified'
+        }
 
         await mongoClient.updateUser({ wallet: user.wallet }, { status: userStatus })
         user.status = userStatus

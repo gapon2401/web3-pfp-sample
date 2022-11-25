@@ -27,8 +27,12 @@ It can be cloned and used for selling pfp-avatars or NFT collections.
 
 1. Clone the repo, run `yarn install`
 2. If you have a collection and want to calculate provenance hash, follow the section below [How to calculate it?](#how-to-calculate-it)
-3. Go to [smartcontract repo](https://github.com/gapon2401/web3-pfp-smartcontract) and follow the instructions. Make sure, that `base URI` was set correctly in order to get information about minted tokens.
-4. Specify `.env` variables.
+3. Go to [smartcontract repo](https://github.com/gapon2401/web3-pfp-smartcontract) and follow the instructions. 
+Make sure, that `base URI` was set correctly in order to get information about minted tokens.
+Save the deployed contract address, you will need it in `.env` file. 
+4. Specify all `.env` variables.
+- `SIGNER_PRIVATE_KEY` - use the same as in the smartcontract `.env` file.
+- `NEXT_PUBLIC_PROVENANCE` - use the same as in the smartcontract `contracts/TheSample.sol` constant `PROVENANCE`.
 5. Run `yarn dev` for local development
 
 Do not upload `.env` file with sensitive data to your repo, add it to `.gitignore`.
