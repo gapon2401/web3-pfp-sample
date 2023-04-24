@@ -27,7 +27,7 @@ export default withPatchApi(async (req: NextApiRequest, res: NextApiResponse) =>
 
       /* Change user status */
       if (user && user.status !== 'verified' && user.status !== 'blocked') {
-        const userStatus = mongoClient.isUserHasRequiredFields(user) ? 'verified' : 'not_registered'
+        const userStatus: User['status'] = mongoClient.isUserHasRequiredFields(user) ? 'verified' : 'not_registered'
 
         await mongoClient.updateUser(
           { wallet: user.wallet },
